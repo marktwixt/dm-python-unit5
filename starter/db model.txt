@@ -1,0 +1,33 @@
+User
+
+id (Integer, primary key)
+username (String, unique, not null)
+password_hash (String, not null)
+email (String, unique, not null)
+ratings (Relationship, "Rating", backref="user")
+
+Movie
+
+id (Integer, primary key)
+title (String, not null)
+release_date (Date, not null)
+genre (String, not null)
+director (String, not null)
+synopsis (Text, not null)
+ratings (Relationship, "Rating", backref="movie")
+
+Rating
+
+id (Integer, primary key)
+user_id (ForeignKey("user.id"), not null)
+movie_id (ForeignKey("movie.id"), not null)
+score (Integer, not null)
+The Rating table uses foreign keys to reference the User and Movie tables. This will allow SQLAlchemy to automatically manage the relationships between these tables for us. The score field in the Rating table is an integer that can range from 0 to 5, corresponding to the star-rating a user can give to a movie.
+
+Please note: the password_hash field in the User table is intended to store a hashed version of the user's password. Never store plaintext passwords in a database.
+
+Here's how these tables might be related:
+
+A User has many Ratings (a one-to-many relationship from User to Rating). This is represented in the User model with the ratings field, which is a relationship field that points to the Rating model.
+A Movie has many Ratings (a one-to-many relationship from Movie to Rating). This is represented in the Movie model with the ratings field, which is a relationship field that points to the Rating model.
+A Rating belongs to one User and one Movie (a many-to-one relationship from Rating to User and Movie). This is represented in the Rating model with the user_id and movie_id fields, which are foreign keys that point to the id field in the User and Movie models, respectively.
